@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import numpy as np
 import pickle
 import sklearn
+import os
 
 print(sklearn.__version__)
 
@@ -11,6 +13,7 @@ preprocessor = pickle.load(open('preprocessor.pkl', 'rb'))
 
 # Flask app
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes, all origins
 
 @app.route('/')
 def index():
@@ -33,6 +36,5 @@ def predict():
     return jsonify({"prediction": float(prediction[0][0])})
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
